@@ -5,6 +5,20 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+export interface IClient {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  coordinate_x: number;
+  coordinate_y: number;
+}
+
+export interface IPoint {
+  coordinate_x: number;
+  coordinate_y: number;
+}
+
 export async function getClients(
   name?: string | string[],
   email?: string,
@@ -38,15 +52,22 @@ export async function getClients(
 }
 
 export async function createClient(
-  name: string,
-  email: string,
-  phone: string,
-  coordinate_x: string,
-  coordinate_y: string
+  name: IClient["name"],
+  email: IClient["email"],
+  phone: IClient["phone"],
+  coordinate_x: IClient["coordinate_x"],
+  coordinate_y: IClient["coordinate_y"]
 ) {
   const query =
     "INSERT INTO clients (name, email, phone, coordinate_x, coordinate_y) VALUES ($1, $2, $3, $4, $5) RETURNING *";
   const params = [name, email, phone, coordinate_x, coordinate_y];
 
   return await pool.query(query, params);
+}
+
+export function calculateDistance(point1: IPoint, point2: IPoint) {
+  let positionX = point2.coordinate_x - point1.coordinate_x;
+  let positionY = point2.coordinate_y - point1.coordinate_y;
+  let result = Math.sqrt(positionX * positionX + positionY * positionY);
+  return result;
 }

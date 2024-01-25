@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { createClient, getClients } from "../models/clientModel";
+import {
+  IClient,
+  calculateDistance,
+  createClient,
+  getClients,
+} from "../models/clientModel";
 import { errorMessages } from "../constants/errorMessages";
 
 export async function listClients(req: Request, res: Response) {
@@ -34,5 +39,26 @@ export async function addClient(req: Request, res: Response) {
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: errorMessages.addClient });
+  }
+}
+
+export async function listClientsByProximity(req: Request, res: Response) {
+  try {
+    let clients = await getClients();
+    clients.rows.sort((clientA: IClient, clientB: IClient) => {
+      let distA = calculateDistance(
+        { coordinate_x: 0, coordinate_y: 0 },
+        clientA
+      );
+      let distB = calculateDistance(
+        { coordinate_x: 0, coordinate_y: 0 },
+        clientB
+      );
+      return distA - distB;
+    });
+
+    res.json(clients.rows);
+  } catch (err) {
+    res.status(500).json({ error: errorMessages.listClients });
   }
 }
