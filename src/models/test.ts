@@ -32,8 +32,8 @@ describe("clientModel", () => {
       name: "Test Client",
       email: "test@client.com",
       phone: "123456789",
-      coordinate_x: "10",
-      coordinate_y: "20",
+      coordinate_x: 10,
+      coordinate_y: 20,
     };
     mocked(pool.query).mockResolvedValueOnce({
       rows: [newClient],
