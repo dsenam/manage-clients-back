@@ -3,6 +3,7 @@ import {
   IClient,
   calculateDistance,
   createClient,
+  getClientByEmail,
   getClients,
 } from "../models/clientModel";
 import { errorMessages } from "../constants/errorMessages";
@@ -29,6 +30,12 @@ export async function addClient(req: Request, res: Response) {
   }
 
   try {
+    const existingClient = await getClientByEmail(email);
+    if (existingClient.rows.length > 0) {
+      res.status(400).json({ error: errorMessages.emailAlreadyUse});
+      return;
+    }
+
     const result = await createClient(
       name,
       email,

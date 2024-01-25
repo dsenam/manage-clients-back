@@ -71,3 +71,10 @@ export function calculateDistance(point1: IPoint, point2: IPoint) {
   let result = Math.sqrt(positionX * positionX + positionY * positionY);
   return result;
 }
+
+export async function getClientByEmail(email: string) {
+  const query = "SELECT * FROM clients WHERE email = $1";
+  const params = [email];
+
+  return await pool.query(query, params);
+}

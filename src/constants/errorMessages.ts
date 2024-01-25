@@ -1,5 +1,6 @@
 export const errorMessages = {
-  missingFields: "Todos os campos são obrigatórios",
-  listClients: "Erro ao listar clientes",
-  addClient: "Erro ao adicionar cliente"
+  missingFields: "All fields are mandatory",
+  listClients: "Error listing customers",
+  addClient: "Error adding customer",
+  emailAlreadyUse: "This email is already in use",
 };
